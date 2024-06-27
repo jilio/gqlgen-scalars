@@ -7,6 +7,7 @@ This repository contains custom scalar types for [gqlgen](https://gqlgen.com/), 
 - `Base64`: Represents base64-encoded data.
 - `BigInt`: Represents a large integer using `math/big.Int`.
 - `Decimal`: Represents a decimal number with arbitrary precision using `github.com/shopspring/decimal`.
+- `Address`: Represents an Ethereum address using `github.com/ethereum/go-ethereum/common.Address`.
 
 ## Installation
 
@@ -32,6 +33,7 @@ To use these scalar types in your gqlgen project:
    scalar Base64
    scalar BigInt
    scalar Decimal
+   scalar Address
    ```
 
 3. Configure gqlgen to use these custom scalar types. In your `gqlgen.yml` file, add:
@@ -44,6 +46,8 @@ To use these scalar types in your gqlgen project:
        model: github.com/jilio/gqlgen-scalars/scalar.BigInt
      Decimal:
        model: github.com/jilio/gqlgen-scalars/scalar.Decimal
+     Address:
+       model: github.com/jilio/gqlgen-scalars/scalar.Address
    ```
 
 4. Use the scalar types in your GraphQL resolvers:
@@ -62,6 +66,10 @@ To use these scalar types in your gqlgen project:
    func (r *Resolver) Decimal() scalar.Decimal {
      return scalar.NewDecimal(decimal.NewFromFloat(123.45))
    }
+
+   func (r *Resolver) Address() scalar.Address {
+     return scalar.Address(common.HexToAddress("0x742d35Cc6634C0532925a3b844Bc454e4438f44e"))
+   }
    ```
 
 ## Examples
@@ -73,12 +81,14 @@ query {
   getBase64Data
   getLargeNumber
   getPreciseDecimal
+  getEthereumAddress
 }
 
 mutation {
   uploadBase64Data(data: "SGVsbG8gV29ybGQ=")
   setLargeNumber(number: "123456789012345678901234567890")
   setPreciseDecimal(value: "123.45000000000000000001")
+  setEthereumAddress(address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e")
 }
 ```
 
